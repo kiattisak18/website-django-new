@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dataapp/css/styletable.css' %}">
+  
+  <title>ผลการค้นหาข้อมูลสกุลพืช</title>
+    <style>
+    .btn-container { margin-bottom: 20px; }
+    .btn-back {
+        background-color: #27512e;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    .btn-back:hover { background-color: #a8ef98; color: #000000; }
+  </style>
+</head>
+<body style="padding-top: 20px;">
+
+  <div class="container my-2">
+    
+    <div class="btn-container">
+       <a href="/manage_genus" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+          <h2 class="page-title">
+             🔎 ผลการค้นหา: <span style="color:var(--text-color); font-weight:normal;">"{{ name }}"</span>
+          </h2>
+
+              <form class="search-bar" method="get" action="{% url 'genusearch' %}" onsubmit="return validateSearch()">
+                <input 
+                  id="searchInput"
+                  type="text" 
+                  name="name" 
+                  class="search-input" 
+                  placeholder="ค้นหาชื่อสกุลพืช..."
+                  value="{{ request.GET.name }}"
+                >
+                <button type="submit" class="btn btn-search">ค้นหา</button>
+              </form>
+
+          <script>
+            function validateSearch() {
+                // ดึงค่าจากช่อง input
+                var x = document.getElementsByName("name")[0].value;
+                // ถ้าค่าว่าง
+                if (x == "") {
+                    alert("กรอกข้อมูลค้นหา"); // แสดงข้อความแจ้งเตือน
+                    return false; // หยุดการส่งฟอร์ม
+                }
+                return true; // ยอมให้ส่งฟอร์ม
+            }
+          </script>
+      </div>
+
+      {% if messages %}
+        <div class="alert-stack">
+          {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" width="15%">รหัส</th>
+                <th scope="col" width="35%">ชื่อสกุลพืช</th>
+                <th scope="col" width="30%">หมายเหตุ</th>
+                <th scope="col" width="10%">แก้ไข</th>
+                <th scope="col" width="10%">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for gg in genus %}
+              <tr>
+                <td scope="row" class="text-center"><b>{{ gg.genus_id }}</b></td>
+                <td style="color: var(--primary-dark); font-weight:600;">{{ gg.genus_name }}</td>
+                <td class="text-desc">{{ gg.remarks }}</td>
+                
+                <td>
+                    <a href="{% url 'updatege' gg.genus_id %}" class="btn btn-info btn-sm">
+                       แก้ไข
+                    </a>
+                </td>
+                
+                <td>
+                  <a href="{% url 'genusde' gg.genus_id %}" class="btn btn-danger btn-sm"
+                     onclick="return confirm('คุณต้องการลบ {{ gg.genus_name }} หรือไม่ ?')">
+                     ลบ
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="5" class="text-center empty-row">
+                      ❌ ไม่พบข้อมูลที่ค้นหา
+                      <br>
+                      <a href="/manage_genus" class="btn btn-warning btn-sm" style="margin-top:10px;">
+                          กลับไปหน้าแสดงข้อมูลทั้งหมด
+                      </a>
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </section>
+  </div> </body>
+</html>

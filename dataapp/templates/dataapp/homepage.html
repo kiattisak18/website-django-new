@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>หน้าแรก - อุทยานพืชสกุลดัลเบียร์เจีย</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/newhome.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">
+            🌿 Dalbergia<span>Park</span>
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'homedata' %}active{% endif %}" href="{% url 'homedata' %}">หน้าแรก</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pagespecies' %}active{% endif %}" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
+                <li><a class="nav-link btn-login" href="{% url 'formlogin' %}">เข้าสู่ระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="hero" style="background-image: url('{% static 'images/52.jpg' %}');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-badge">ยินดีต้อนรับ</span>
+        <h1>อุทยานพืชสกุลดัลเบียร์เจีย</h1>
+        <p>แหล่งรวบรวมความรู้และสายพันธุ์ไม้อันทรงคุณค่า สู่การเรียนรู้ที่ยั่งยืน</p>
+        <a href="" class="btn-hero"></a>
+    </div>
+</section>
+
+<section id="news-section" class="content-section">
+    <div class="container">
+        
+        <div class="section-header">
+            <h2>📢 ข่าวสารและเกร็ดความรู้</h2>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="feature-list">
+            {% if knowledge %}
+                {% for item in knowledge %}
+                <div class="feature-row {% cycle 'row-normal' 'row-reverse' %}">
+                    
+                    <div class="feature-image">
+                        <div class="image-wrapper">
+                            {% if item.info_image %}
+                                <img src="{{ item.info_image.url }}" alt="News Image">
+                            {% else %}
+                                <img src="{% static 'images/default.jpg' %}" alt="Default Image">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="feature-content">
+                        <span class="feature-tag">UPDATE: {{ item.info_date|date:"d M Y" }}</span>
+                        
+                        <h3 class="feature-title">
+                            {{ item.info_headline|truncatechars:100 }}
+                        </h3>
+
+                        <div class="content">
+                            {{ info.info_content|linebreaks }}
+                        </div>
+
+                        <!--<h3 class="feature-title">
+                            {{ item.info_content|truncatechars:40 }}
+                        </h3>-->
+                        
+                        <div class="feature-desc">
+                            <p><strong>ผู้เขียน:</strong> {{ item.info_creator }}</p>
+                            <p>{{ item.info_content|truncatechars:200 }}</p>
+                        </div>
+                        
+                        <a href="{% url 'knowledge_detail' item.pk %}" class="btn-feature">อ่านเพิ่มเติม &rarr;</a>
+                    </div>
+
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">
+                    <p>📭 ยังไม่มีข้อมูลข่าวสารในขณะนี้</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+    </div>
+</footer>
+
+</body>
+</html>

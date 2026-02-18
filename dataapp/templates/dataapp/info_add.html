@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dataapp/css/newform.css' %}">
+  
+  <title>เพิ่มข้อมูลเกร็ดความรู้</title>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="btn-container">
+      <a href="{% url 'infodata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="form-card">
+        <header class="form-header">
+            <h2 class="page-title">📘 แบบฟอร์มเพิ่มเกร็ดความรู้</h2>
+            <p class="text-muted">กรอกข้อมูลสาระน่ารู้เกี่ยวกับพืช</p>
+        </header>
+
+        <form method="post" action="{% url 'addinf' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="field">
+            <label for="infoby">หัวข้อข่าว</label>
+            <input type="text" name="heading" id="info_update_by" placeholder="" required>
+          </div>  
+
+          <div class="field">
+            <label for="info_content">เนื้อหา</label>
+            <textarea name="infocontent" id="info_content" rows="4" placeholder="" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="infoby">ผู้อัปเดต</label>
+            <input type="text" name="infoby" id="info_update_by" placeholder="" required>
+          </div>  
+          
+          <div class="field">
+            <label for="info_date">วันที่</label>
+            <input type="date" name="infodate" id="info_date" required>
+          </div>
+
+          <div class="field">
+            <label for="infoimage">รูปภาพประกอบ</label>
+            <div style="border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 8px; background-color: #fafafa;">
+                <input type="file" 
+                       name="infoimage" 
+                       id="infoimage" 
+                       accept="image/*" 
+                       onchange="previewImage(event)"
+                       style="display: block; margin: 0 auto;">
+                
+                <div style="margin-top: 15px;">
+                    <img id="preview" style="display:none; max-width: 100%; max-height: 250px; border-radius:10px; border: 1px solid #ccc; margin: 0 auto;">
+                </div>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-save">บันทึกข้อมูล</button>
+            
+            <a href="{% url 'infodata' %}" class="btn btn-danger">ยกเลิก</a>
+          </div>
+
+        </form>
+    </section>
+
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const input = event.target;
+      const preview = document.getElementById('preview');
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      } else {
+          preview.src = "";
+          preview.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>

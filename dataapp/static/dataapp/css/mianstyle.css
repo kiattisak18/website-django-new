@@ -1,0 +1,362 @@
+/* ========================================= mianstyle.css
+   1. Variables & Global Reset (ตั้งค่าพื้นฐาน)
+   ========================================= */
+:root {
+    /* ชุดสีหลัก (Greenery Theme) */
+    --primary-color: #2E7D32;      /* เขียวเข้ม (ป่าไม้) - ใช้กับหัวข้อหลัก */
+    --secondary-color: #4CAF50;    /* เขียวสดใส - ใช้กับ Tag หรือปุ่ม */
+    --accent-color: #FFC107;       /* สีเหลืองทอง - ใช้ตกแต่ง */
+    
+    /* สีตัวอักษรและพื้นหลัง */
+    --dark-text: #333333;
+    --gray-text: #666666;
+    --light-text: #999999;
+    --white: #ffffff;
+    --bg-light: #F9FBE7;           /* พื้นหลังสีครีมอมเขียวอ่อน */
+    
+    /* การตกแต่งอื่นๆ */
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+    --radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+body::before {
+    content: "🌿";
+    position: fixed;
+    top: 20%;
+    left: 2%;
+    font-size: 5rem;
+    opacity: 0.1; /* ปรับให้จางมากๆ เพื่อไม่ให้กวนสายตา */
+    filter: grayscale(100%);
+    z-index: -1;
+}
+
+body::after {
+    content: "🍃";
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    font-size: 6rem;
+    opacity: 0.1;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* =========================================
+   2. Navbar (เมนูบาร์ด้านบน)
+   ========================================= */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px); /* เอฟเฟกต์เบลอพื้นหลัง */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.logo span { color: var(--secondary-color); }
+
+/* =========================================
+   2. Navbar (เมนูบาร์ด้านบน)
+   ========================================= */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-menu { 
+    display: flex; 
+    gap: 8px; 
+    align-items: center; 
+}
+
+/* --- ส่วนที่แก้ไข: เมนูบาร์แบบเน้นสีและตัวหนา --- */
+.nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--dark-text);
+    padding: 5px 8px;
+    transition: color 0.3s ease, font-weight 0.2s ease;
+    display: inline-block;
+}
+
+/* เมื่อนำเมาส์ไปชี้ (Hover) */
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* เมื่ออยู่ในหน้านั้น (Active) */
+.nav-link.active {
+    color: var(--primary-color) !important;
+    font-weight: 700; /* ทำให้ตัวหนังสือหนาขึ้น */
+}
+
+/* ปุ่ม Login ให้ดูเด่น */
+.btn-login {
+    background-color: var(--primary-color);
+    color: var(--white) !important;
+    padding: 8px 20px;
+    border-radius: 25px;
+}
+.btn-login:hover { background-color: #1B5E20; transform: translateY(-2px); }
+
+/* =========================================
+   3. Hero Section (ภาพปกขนาดใหญ่)
+   ========================================= */
+.hero {
+    height: 90vh; /* ความสูงเกือบเต็มจอ */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    margin-top: -60px; /* ดึงขึ้นไปซ้อน Navbar */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero-badge {
+    background-color: var(--accent-color);
+    color: #333;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin: 20px 0 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.btn-hero {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 2px solid var(--white);
+    color: var(--white);
+    border-radius: 30px;
+    font-weight: 600;
+}
+.btn-hero:hover { background-color: var(--white); color: var(--primary-color); }
+
+/* =========================================
+   4. Feature Section (Zig-Zag Layout)
+   ========================================= */
+.content-section {
+    padding: 80px 0;
+    background-color: var(--white);
+}
+
+.section-header { text-align: center; margin-bottom: 40px; }
+.section-header h2 { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+.feature-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.feature-row.row-reverse {
+    flex-direction: row-reverse;
+}
+
+.feature-image {
+    flex: 1;
+    position: relative;
+}
+
+.image-wrapper {
+    width:100%;
+    height: 450px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.feature-row:hover .image-wrapper img {
+    transform: scale(1.05);
+}
+
+.feature-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.feature-tag {
+    display: inline-block;
+    color: var(--secondary-color);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.feature-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.feature-desc {
+    color: var(--gray-text);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+.feature-desc strong { color: var(--dark-text); }
+
+.btn-feature {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-feature:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+.no-data {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--gray-text);
+    padding: 50px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* =========================================
+   5. Footer (ส่วนท้ายเว็บ)
+   ========================================= */
+.footer {
+    background-color: #1a1a1a;
+    color: #bbb;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 0;
+}
+.footer p { font-size: 0.9rem; }
+
+/* =========================================
+   6. Responsive Styles (มือถือ & แท็บเล็ต)
+   ========================================= */
+@media (max-width: 992px) {
+    .hero h1 { font-size: 2.5rem; }
+    
+    .feature-row, 
+    .feature-row.row-reverse {
+        flex-direction: column; 
+        gap: 30px;
+    }
+
+    .image-wrapper { height: 300px; }
+    .feature-title { font-size: 1.8rem; }
+    
+    .nav-menu { display: none; } 
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

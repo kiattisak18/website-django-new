@@ -1,0 +1,219 @@
+/* =========================================
+   1. Variables & Global Reset (พื้นฐาน)
+   ========================================= */
+:root {
+    --primary-color: #2E7D32;
+    --secondary-color: #4CAF50;
+    --accent-color: #FFC107;
+    --dark-text: #333333;
+    --gray-text: #666666;
+    --white: #ffffff;
+    --bg-light: #F9FBE7;
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+    --radius: 15px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ตกแต่งใบไม้จางๆ ที่มุมจอ (จาก mianstyle) */
+body::before {
+    content: "🌿";
+    position: fixed;
+    top: 20%;
+    left: 2%;
+    font-size: 5rem;
+    opacity: 0.1;
+    z-index: -1;
+    filter: grayscale(100%);
+}
+
+body::after {
+    content: "🍃";
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    font-size: 6rem;
+    opacity: 0.1;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* =========================================
+   2. Navbar (เมนูบาร์ด้านบน)
+   ========================================= */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.logo span { color: var(--secondary-color); }
+
+.nav-menu { display: flex; gap: 8px; align-items: center; }
+
+.nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--dark-text);
+    padding: 5px 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.btn-login {
+    background-color: var(--primary-color);
+    color: var(--white) !important;
+    padding: 8px 20px;
+    border-radius: 25px;
+}
+
+/* =========================================
+   3. Content Section & Predict Styles
+   ========================================= */
+.content-section {
+    padding: 120px 0 80px; /* เว้นระยะจาก Navbar */
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+/* Image Preview */
+.image-preview-wrapper {
+    margin-bottom: 20px;
+}
+
+#image-preview {
+    max-width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 2px dashed #ccc;
+    display: block;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+/* ปุ่มและฟอร์ม */
+.btn-feature {
+    display: inline-block;
+    background-color: #666;
+    color: #fff;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-predict {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--white) !important; 
+    color: var(--primary-color) !important;
+    border: 2px solid var(--primary-color) !important;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-predict:hover {
+    background-color: #f1f8e9 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(46, 125, 50, 0.1);
+}
+
+.btn-predict:active {
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* Result Card */
+.result-card {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: var(--radius);
+    background: #E8F5E9;
+    border: 1px solid var(--primary-color);
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* =========================================
+   4. Footer (ส่วนท้ายเว็บ)
+   ========================================= */
+.footer {
+    background-color: #1a1a1a;
+    color: #bbb;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 50px;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

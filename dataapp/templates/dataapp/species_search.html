@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'dataapp/css/styletable.css' %}">
+  
+  <title>ผลการค้นหาข้อมูลพืช</title>
+
+  <style>
+    .btn-container { margin-bottom: 20px; }
+    .btn-back {
+        background-color: #27512e;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    .btn-back:hover { background-color: #a8ef98; color: #000000; }
+  </style>
+</head>
+
+<body style="padding-top: 20px;">
+
+  <div class="container my-2">
+    
+    <div class="btn-container">
+       <a href="{% url 'specidata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+          <h2 class="page-title">
+             🔎 ผลการค้นหา: <span style="color:#555; font-weight:normal; font-size: 1.5rem;">"{{ query }}"</span>
+          </h2>
+
+          <form class="search-bar" method="get" action="{% url 'speciessearch' %}">
+            <input 
+              type="text" 
+              name="q" 
+              class="search-input" 
+              placeholder="ค้นหาชื่อไทย/ชื่อวิทย์..."
+              value="{{ request.GET.q }}"
+            >
+            <button type="submit" class="btn-search">ค้นหา</button>
+          </form>
+      </div>
+
+      {% if messages %}
+        <div class="alert-stack">
+          {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" width="5%">#</th>
+                <th scope="col" width="20%">ชื่อวิทยาศาสตร์</th>
+                <th scope="col" width="15%">ชื่อไทย</th>
+                <th scope="col" width="30%">ลักษณะ</th>
+                <th scope="col" width="10%">สกุลพืช</th>
+                <th scope="col" width="10%">รูปภาพ</th>
+                <th scope="col" width="10%">แก้ไข</th>
+                <th scope="col" width="10%">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ss in species %}
+              <tr>
+                <td scope="row" class="text-center"><b>{{ ss.species_id }}</b></td>
+                <td class="text-italic">{{ ss.sci_name }}</td>
+                <td>{{ ss.thai_name }}</td>
+                <td class="text-desc">{{ ss.description|truncatechars:50 }}</td>
+                <td><span class="badge">{{ ss.genus.genus_name }}</span></td>
+                
+                <td>
+                    <a href="{% url 'showspeciesgallery' ss.species_id %}" class="btn btn-warning btn-sm">
+                       รูปภาพ
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'speciesupdate' ss.species_id %}" class="btn btn-info btn-sm">
+                       แก้ไข
+                    </a>
+                </td>
+                
+                <td>
+                  <a href="{% url 'speciesdelete' ss.species_id %}" class="btn btn-danger btn-sm"
+                     onclick="return confirm('คุณต้องการลบ {{ ss.thai_name }} หรือไม่ ?')">
+                     ลบ
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="7" class="text-center empty-row">
+                      ❌ ไม่พบข้อมูลที่ค้นหา
+                      <br>
+                      <a href="{% url 'specidata' %}" class="btn" style="margin-top:10px; background-color: #FF9800; color: white; border:none;">
+                          กลับไปหน้าแสดงข้อมูลทั้งหมด
+                      </a>
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </section>
+  </div> 
+</body>
+</html>

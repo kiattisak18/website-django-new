@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>หน้าแรก - อุทยานพืชสกุลดัลเบียร์เจีย</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/mianstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/speciespage.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">
+            🌿 Dalbergia<span>Park</span>
+        </a>
+        
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'homedata' %}active{% endif %}" href="{% url 'homedata' %}">หน้าแรก</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pagespecies' %}active{% endif %}" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
+                <li><a class="nav-link btn-login" href="/manage_data">เข้าสู่ระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="species-section" class="content-section" style="background-color: #f9f9f9;">
+    <div class="container"> 
+        
+        <div class="search-container">
+            <form action="" method="GET" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" name="alltext" class="search-input" placeholder="ค้นหาชื่อพืช หรือสายพันธุ์...">
+                <button type="submit" class="btn-search">ค้นหา</button>
+            </form>
+        </div>
+
+        <div class="section-header">
+            <h2>🌿 ข้อมูลสายพันธุ์พืช</h2>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="species-grid">
+    {% if species %}
+        {% for plant in species %}
+        <div class="card">
+            <div class="card-img-wrapper" style="overflow: hidden;">
+                {% with cover_image=plant.images.first %}
+                    {% if cover_image %}
+                        <img src="{{ cover_image.speciesimage.url }}" class="card-img" alt="{{ plant.thai_name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img">
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="card-body">
+                <div class="card-title">{{ plant.thai_name }}</div>
+                <div class="card-subtitle">{{ plant.sci_name }}</div>
+                <p class="card-desc">{{ plant.description|truncatechars:80 }}</p> 
+                <a href="#" class="btn-detail">ดูรายละเอียด &rarr;</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-data" style="grid-column: 1/-1; text-align: center; padding: 50px;">
+            <p style="font-size: 1.2rem; color: var(--gray-text);">
+                {% if query %}
+                    📭 ไม่พบข้อมูลที่ตรงกับคำค้นหา "{{ query }}"
+                {% else %}
+                    📭 ยังไม่มีข้อมูลพันธุ์พืชในขณะนี้
+                {% endif %}
+            </p>
+            {% if query %}
+                <a href="{% url 'pagespecies' %}" style="color: var(--primary-color); font-weight: bold;">ดูรายชื่อพืชทั้งหมด</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+</section>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+    </div>
+</footer>
+
+</body>
+</html>

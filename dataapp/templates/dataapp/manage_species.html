@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'dataapp/css/styletable.css' %}">
+  
+  <title>จัดการข้อมูลสายพันธุ์พืช</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="">🌿 Dalbergia Manager</a>
+
+
+      <ul class="nav-links">
+        <li><a href="{% url 'addspec' %}">เพิ่มข้อมูล</a></li>
+        <li><a href="{% url 'speciesimage' %}">เพิ่มรูปภาพ</a></li>
+        <li><a href="{% url 'mndata' %}">หน้าหลัก</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container my-2">
+    <section class="card">
+        
+      <div class="card-header">
+          <h2 class="page-title">🌱 ตารางข้อมูลสายพันธุ์พืช</h2>
+          
+          <form class="search-bar" method="get" action="{% url 'speciessearch' %}">
+            <input 
+              type="text" 
+              name="message" 
+              class="search-input" 
+              placeholder=""
+              value="{{ request.GET.message }}"
+               required 
+                oninvalid="this.setCustomValidity('กรอกข้อมูลค้นหา')" 
+                oninput="this.setCustomValidity('')"
+            >
+            <button type="submit" class="btn btn-search">🔍 ค้นหา</button>
+          </form>
+      </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+              {% if messages %}
+                  {% for message in messages %}
+                      <script>
+                          Swal.fire({
+                              title: 'สำเร็จ!',          // หัวข้อ
+                              text: '{{ message }}',     // ข้อความจาก views.py (บันทึกข้อมูลเรียบร้อย)
+                              icon: 'success',           // ไอคอน (success, error, warning, info)
+                              confirmButtonText: 'ตกลง',  // ข้อความปุ่ม
+                              confirmButtonColor: '#3085d6' // สีปุ่ม
+                          });
+                      </script>
+                  {% endfor %}
+              {% endif %}
+
+
+      <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" width="5%">#</th>
+                <th scope="col" width="15%">ชื่อวิทยาศาสตร์</th>
+                <th scope="col" width="15%">ชื่อไทย</th>
+                <th scope="col" width="25%">ลักษณะ</th>
+                <th scope="col" width="10%">สกุลพืช</th>
+                <th scope="col" width="10%">รูปภาพ</th>
+                <th scope="col" width="10%">แก้ไข</th>
+                <th scope="col" width="10%">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ss in spi %}
+              <tr>
+                <td scope="row" class="text-center"><b>{{ ss.species_id }}</b></td>
+                <td class="text-italic">{{ ss.sci_name }}</td>
+                <td>{{ ss.thai_name }}</td>
+                <td class="text-desc">{{ ss.description|truncatechars:50 }}</td>
+                <td><span class="badge">{{ ss.genus.genus_name }}</span></td>
+                
+                <td>
+                    <a href="{% url 'testload' ss.species_id %}" class="btn btn-warning btn-sm">
+                       รูปภาพ
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'speciesupdate' ss.species_id %}" class="btn btn-info btn-sm">
+                         แก้ไข
+                    </a>
+                </td>
+                <td>
+                  <a href="{% url 'speciesdelete' ss.species_id %}" class="btn btn-danger btn-sm"
+                     onclick="return confirm('คุณต้องการลบ {{ ss.thai_name }} หรือไม่ ?')">
+                      ลบ
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="8" class="text-center empty-row">
+                      ❌ ยังไม่มีข้อมูลในระบบ
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>

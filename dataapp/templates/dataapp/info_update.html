@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dataapp/css/newform.css' %}">
+  
+  <title>แก้ไขเกร็ดความรู้</title>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="btn-container">
+      <a href="{% url 'infodata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="form-card">
+        <header class="form-header">
+            <h2 class="page-title">✏️ แบบฟอร์มแก้ไขเกร็ดความรู้</h2>
+            <p class="text-muted">กำลังแก้ไขข้อมูลโดย: {{ kn.info_creator }}</p>
+        </header>
+
+        <form method="post" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="field">
+            <label for="info_content">เนื้อหา</label>
+            <textarea name="infocontent" id="info_content" rows="4" required>{{ kn.info_content }}</textarea>
+          </div>
+
+          <div class="field">
+            <label for="infoby">ผู้อัปเดต</label>
+            <input type="text" name="infoby" id="info_update_by" value="{{ kn.info_creator }}" required>
+          </div>  
+          
+          <div class="field">
+            <label for="info_date">วันที่</label>
+            <input type="date" name="infodate" id="info_date" value="{{ kn.info_date|date:'Y-m-d' }}" required>
+          </div>
+
+          <div class="field">
+            <label>รูปภาพประกอบ</label>
+            
+            <div style="border: 2px dashed #ddd; padding: 20px; text-align: center; border-radius: 8px; background-color: #fafafa;">
+                
+                {% if kn.info_image %}
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">รูปภาพปัจจุบัน:</p>
+                        <img src="{{ kn.info_image.url }}" 
+                             style="max-width: 200px; max-height: 150px; border-radius: 6px; border: 1px solid #ccc;">
+                    </div>
+                {% endif %}
+
+                <p style="font-size: 0.9rem; color: #888; margin-bottom: 10px;">เลือกรูปใหม่เพื่อเปลี่ยน (ถ้าไม่เลือกจะใช้รูปเดิม)</p>
+                <input type="file" 
+                       name="infoimage" 
+                       accept="image/*" 
+                       onchange="previewImage(event)"
+                       style="display: block; margin: 0 auto;">
+
+                <div style="margin-top: 15px;">
+                     <img id="preview" style="display:none; max-width: 200px; border-radius:10px; border: 1px solid #2E7D32; margin: 0 auto;">
+                     <p id="preview-text" style="display:none; color: #2E7D32; font-size: 0.8rem; margin-top: 5px;">* รูปภาพใหม่ที่จะถูกบันทึก</p>
+                </div>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-save">บันทึกการแก้ไข</button>
+            
+            <a href="{% url 'infodata' %}" class="btn btn-danger">ยกเลิก</a>
+          </div>
+
+        </form>
+    </section>
+
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const input = event.target;
+      const preview = document.getElementById('preview');
+      const previewText = document.getElementById('preview-text');
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          previewText.style.display = 'block';
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        preview.src = "";
+        preview.style.display = 'none';
+        previewText.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>

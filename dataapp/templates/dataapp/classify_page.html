@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>หน้าแรก - อุทยานพืชสกุลดัลเบียร์เจีย</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'dataapp/css/new_predict.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">
+            🌿 Dalbergia<span>Park</span>
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'homedata' %}active{% endif %}" href="{% url 'homedata' %}">หน้าแรก</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pagespecies' %}active{% endif %}" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
+                <li><a class="nav-link btn-login" href="{% url 'formlogin' %}">เข้าสู่ระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="content-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>🌿 ระบบจำแนกสายพันธุ์พืชอัตโนมัติ</h2>
+            <div class="divider-line"></div>
+            <p>อัปโหลดรูปภาพใบไม้ เพื่อให้ AI ช่วยวิเคราะห์</p>
+            <p>หมายเหตุ อัปโหลดใบเดียว</p>
+        </div>
+
+        <div class="predict-container" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'classify' %}">
+                {% csrf_token %}
+                
+               <div class="image-preview-wrapper" style="margin-bottom: 20px;">
+                    <img id="image-preview"
+                    src="{% if image_url %}{{ image_url }}{% else %}{% static 'images/default-placeholder.png' %}{% endif %}"
+                    alt="Preview"
+                    style="max-width: 100%; height: 300px; object-fit: cover;
+                    border-radius: 15px; border: 2px dashed #ccc;
+                    display: block; margin: 0 auto;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label for="plant_image" class="btn-feature" style="cursor: pointer; background-color: #666; border: none;">
+                        📁 เลือกรูปภาพ
+                    </label>
+                    <input type="file" name="plant_image" id="plant_image" accept="image/*" 
+                           onchange="previewImage(event)" style="display: none;" required>
+                </div>
+
+                <button type="submit" class="btn-predict">
+                    🚀 เริ่มการประเมินผล (Predict)
+                </button>
+            </form>
+
+            {% if result %}
+            <div class="result-card" style="margin-top: 30px; padding: 25px; border-radius: 15px; background: #E8F5E9; border: 1px solid #2E7D32; animation: fadeInUp 0.5s ease-out;">
+                <h3 style="color: #2E7D32; margin-bottom: 10px;">ผลการวิเคราะห์: {{ result }}</h3>
+                <p style="font-size: 1.1rem;">ความเชื่อมั่น: <strong style="color: #4CAF50;">{{ confidence }}</strong></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = document.getElementById('image-preview');
+                output.src = reader.result;
+                output.style.border = "2px solid #2E7D32"; // เปลี่ยนสีกรอบเมื่อมีรูป
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+    <script>
+        document.querySelector('form').onsubmit = function() {
+            const btn = document.querySelector('.btn-predict');
+            btn.innerHTML = "⌛ กำลังวิเคราะห์ผล... โปรดรอสักครู่";
+            btn.style.opacity = "0.7";
+            btn.style.pointerEvents = "none";
+        };
+    </script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+        </div>
+    </footer>
+
+</body>
+</html>

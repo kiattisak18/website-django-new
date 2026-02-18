@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เพิ่มผู้ดูแลระบบ</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'dataapp/css/mianstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/login.css' %}"> 
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">
+            🌿 Dalbergia<span>Park</span>
+        </a>
+        <nav>
+            <ul class="nav-menu">
+               
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'adminmanage' %}">ย้อนกลับ</a></li>
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+    <div class="login-page">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>➕ เพิ่มผู้ดูแลระบบใหม่</h2>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="login-form" action="{% url 'adminadd' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label>ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" name="user_name" required placeholder="ตัวอักษรภาษาอังกฤษ">
+                </div>
+                <div class="input-group">
+                    <label>รหัสผ่าน (Password)</label>
+                    <input type="password" name="password" required placeholder="ตั้งรหัสผ่าน">
+                </div>
+                <div class="input-group">
+                    <label>ชื่อ-นามสกุล</label>
+                    <input type="text" name="full_name" required placeholder="ชื่อสำหรับแสดงผล">
+                </div>
+                <button type="submit" class="btn-submit">ยืนยันการเพิ่มสมาชิก</button>
+            </form>
+            <div class="login-footer">
+                <a href="{% url 'mndata' %}">← กลับหน้าจัดการข้อมูล</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

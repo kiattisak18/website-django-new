@@ -1,0 +1,243 @@
+/* ไฟล์: static/dataapp/css/managedata.css */
+
+/* --- 1. Reset & Base Styles --- */
+:root {
+  --primary: #2E7D32;       /* เขียวเข้ม */
+  --primary-hover: #1B5E20;
+  --accent: #E8F5E9;        /* เขียวอ่อนพื้นหลัง */
+  --text-dark: #333;
+  --text-light: #666;
+  --white: #ffffff;
+  --shadow: 0 4px 6px rgba(0,0,0,0.1);
+  --card-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  --radius: 12px;
+}
+
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background-color: #f0f2f5;
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit; 
+  transition: 0.3s; 
+}
+
+ul { 
+  list-style: none; 
+}
+
+/* --- 2. Navbar --- */
+.site-header {
+  background: var(--white);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.logo span { color: var(--secondary-color); }
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  font-weight: 600;
+  color: var(--text-dark);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.nav-links a:hover {
+  background-color: var(--accent);
+  color: var(--primary);
+}
+
+.btn-logout {
+  color: #d32f2f !important; /* สีแดง */
+  font-weight: bold !important;
+}
+
+.btn-logout:hover {
+  background-color: #ffebee !important;
+}
+
+
+/* --- 3. Hero Section --- */
+.hero {
+  position: relative;
+  height: 300px;
+  margin: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* --- 4. Dashboard Grid (Menu Section) --- */
+.dashboard-container {
+  max-width: 1200px;
+  margin: -50px auto 60px; /* ดึงขึ้นไปซ้อนบน Hero */
+  padding: 0 20px;
+  position: relative;
+  z-index: 3;
+}
+
+.grid-menu {
+  display: grid;
+  /* กำหนดให้มี 3 คอลัมน์เท่าๆ กัน */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 30px;
+}
+
+.menu-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.menu-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+  border-color: var(--primary);
+}
+
+.icon-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.menu-card:hover .icon-box {
+  background: var(--primary);
+  color: var(--white);
+  transform: scale(1.1);
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.card-desc {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+
+/* --- 5. Responsive Design --- */
+
+/* หน้าจอขนาดกลาง (Tablets) */
+@media (max-width: 1024px) {
+  .grid-menu {
+    grid-template-columns: repeat(2, 1fr); /* ปรับเหลือ 2 คอลัมน์ */
+    gap: 20px;
+  }
+}
+
+/* หน้าจอขนาดเล็ก (Mobiles) */
+@media (max-width: 768px) {
+  .hero { 
+    height: 250px; 
+    margin: 15px; 
+  }
+  .hero-title { 
+    font-size: 1.8rem; 
+  }
+  .dashboard-container { 
+    margin-top: -30px; 
+  }
+  .grid-menu { 
+    grid-template-columns: 1fr; /* ปรับเป็นแถวละ 1 อัน */
+  }
+  .menu-card {
+    padding: 30px 20px;
+  }
+}

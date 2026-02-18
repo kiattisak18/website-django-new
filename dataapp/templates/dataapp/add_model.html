@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>จัดการโมเดล AI - DalbergiaPark</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'dataapp/css/add_model.css' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/style_head.css' %}">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="">🌿 Dalbergia Manager</a>
+
+
+
+      <ul class="nav-links">
+        <li><a href="{% url 'mndata' %}">หน้าหลัก</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<div class="update-management-container">
+        <div class="section-header">
+            <h2>🛠️ ระบบจัดการโมเดลจำแนกสายพันธุ์พืช</h2>
+        </div>
+
+    <div class="status-card" style="margin-top: 20px;">
+        <span class="status-label">📂 โมเดลที่กำลังใช้งาน</span>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid #eee; background-color: #f8f9fa;">
+                    <th style="padding: 12px;">ชื่อไฟล์</th>
+                    <th style="padding: 12px; text-align: center;">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in model_files %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;"><code style="color: #333; background: #f4f4f4; padding: 2px 5px; border-radius: 4px;">{{ file }}</code></td>
+                    <td style="padding: 12px; text-align: center;">
+                        <form action="{% url 'lostmodel' file %}" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์นี้? การลบไม่สามารถย้อนกลับได้');" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: #fff; color: #d32f2f; border: 1px solid #d32f2f; padding: 6px 12px; border-radius: 5px; cursor: pointer; transition: 0.3s;">
+                                 ลบไฟล์
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" style="padding: 30px; text-align: center; color: #999;">📭 ไม่พบไฟล์โมเดลอื่นในระบบ</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="upload-box" style="margin-top: 20px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p style="margin-bottom: 15px; font-weight: 600;">อัปโหลดไฟล์โมเดลใหม่</p>
+            
+            <input type="file" name="new_model" accept=".h5,.keras,.tflite,.sav,.pkl" class="file-input-custom" required>
+            
+            <button type="submit" class="btn-predict">
+                🔄 อัปโหลดโมเดลใหม่
+            </button>
+        </form>
+
+        {% if success %}<p class="msg-success">✅ {{ success }}</p>{% endif %}
+        {% if error %}<p class="msg-error">⚠️ {{ error }}</p>{% endif %}
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังรูปภาพ: {{ species.thai_name }}</title>
+    
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/styleimage.css' %}">
+    
+    <style>
+        /* CSS ส่วนควบคุมการดาวน์โหลด (ปุ่มและ Toolbar) */
+        .download-toolbar {
+            background: #ffffff;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-download-selected {
+            background-color: #2E7D32;
+            color: white !important;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-download-selected:hover {
+            background-color: #1B5E20;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+        }
+
+        /* ตกแต่ง Checkbox บนรูปภาพ */
+        .image-card { position: relative; }
+        
+        .img-checkbox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #2E7D32; /* สีเขียวสำหรับเบราว์เซอร์สมัยใหม่ */
+        }
+
+        .toolbar-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="btn-container" style="text-align: left; margin-bottom: 20px;">
+            <a href="{% url 'specidata' %}" class="btn btn-back" style="text-decoration: none;">⬅ กลับหน้าตารางข้อมูล</a>
+        </div>
+
+        <header>
+            <h1>{{ species.thai_name }}</h1>
+            <div class="sci-name"><i>{{ species.sci_name }}</i></div>
+            
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <span class="info-tag">สกุล: {{ species.genus.genus_name }}</span>
+                {% if species.description %}
+                    <span class="info-tag" style="background-color: #8D6E63;">ลักษณะ: {{ species.description }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if images %}
+            <form action="{% url 'download_selected_images' %}" method="POST" id="download-form">
+                {% csrf_token %}
+                
+                <div class="download-toolbar">
+                    <label class="toolbar-label">
+                        <input type="checkbox" id="select-all" style="width: 20px; height: 20px;"> 
+                        เลือกทั้งหมด ({{ images|length }} รูป)
+                    </label>
+                    <button type="submit" class="btn-download-selected">
+                        <i class="fas fa-download"></i> 📥 ดาวน์โหลดรูปที่เลือก (.zip)
+                    </button>
+                </div>
+
+                <div class="gallery-grid">
+                    {% for img in images %}
+                    <div class="image-card">
+                        <input type="checkbox" name="selected_images" value="{{ img.id }}" class="img-checkbox">
+                        
+                        <a href="{{ img.speciesimage.url }}" target="_blank">
+                            <img src="{{ img.speciesimage.url }}" alt="{{ species.thai_name }}">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+        {% else %}
+            <div class="empty-state" style="text-align: center; padding: 50px;">
+                <p style="font-size: 1.5rem; color: #666;">📷 ยังไม่มีรูปภาพสำหรับสายพันธุ์นี้</p>
+                <a href="{% url 'speciesimage' %}" class="btn btn-add" style="display: inline-block; margin-top: 15px;">เพิ่มรูปภาพตอนนี้</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        // ระบบ "เลือกทั้งหมด"
+        const selectAll = document.getElementById('select-all');
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                const checkboxes = document.getElementsByName('selected_images');
+                for (let checkbox of checkboxes) {
+                    checkbox.checked = this.checked;
+                }
+            });
+        }
+
+        // ตรวจสอบก่อนส่งฟอร์ม (ต้องเลือกอย่างน้อย 1 รูป)
+        const downloadForm = document.getElementById('download-form');
+        if (downloadForm) {
+            downloadForm.onsubmit = function() {
+                const checkedCount = document.querySelectorAll('input[name="selected_images"]:checked').length;
+                if (checkedCount === 0) {
+                    alert('⚠️ กรุณาเลือกรูปภาพที่ต้องการดาวน์โหลดอย่างน้อย 1 รูป');
+                    return false; // ไม่ส่งฟอร์ม
+                }
+                return true; // ส่งฟอร์มปกติ
+            };
+        }
+    </script>
+
+</body>
+</html>

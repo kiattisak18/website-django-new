@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'dataapp/css/newform.css' %}">
+  
+  <title>เพิ่มข้อมูลสายพันธุ์พืช</title>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="btn-container">
+       <a href="{% url 'specidata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="form-card">
+        <header class="form-header">
+            <h2 class="page-title">🌿 แบบฟอร์มแก้ไขข้อมูลสายพันธุ์พืช</h2>
+            <p class="text-muted">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+        </header>
+
+          <form method="post" action="">
+      {% csrf_token %}
+
+        <!--<div class="field">
+            <label for="species_id">รหัสสายพันธุ์พืช</label>
+            <input type="text" name="species_id" id="species_id" value="{{ sp.species_id }}"required>
+        </div>-->
+
+      <div class="field">
+        <label for="sciname">ชื่อวิทยาศาสตร์</label>
+        <input type="text" name="sciname" id="sciname" value="{{ sp.sci_name }}"required>
+      </div>
+
+      <div class="field">
+        <label for="thainame">ชื่อไทย</label>
+        <input type="text" name="thainame" id="thainame" value="{{ sp.thai_name }}" required>
+      </div>
+
+        <div class="field">
+            <label for="descri">ลักษณะ</label>
+            <input type="text" name="descri" id="descri" value="{{ sp.description }}" required>
+        </div>
+
+        <div class="field">
+            <label>สกุลพืช</label>
+            <select name="typegenus" required>
+                {% for g in gn %}
+                    <option value="{{ g.genus_id }}"
+                        {% if g.genus_id == sp.genus_id %}selected{% endif %}>{{ g.genus_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-info">บันทึกการแก้ไข</button>
+        <a href="" class="btn btn-danger">ยกเลิก</a>
+      </div>
+      <!-- ถ้าอยากปุ่มสีเขียว ให้ใช้ class="btn btn-success" พร้อมเพิ่ม CSS ด้านล่าง -->
+    </form>
+    </section>
+
+  </div>
+
+</body>
+</html>

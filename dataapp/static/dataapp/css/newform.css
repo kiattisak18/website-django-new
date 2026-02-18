@@ -1,0 +1,156 @@
+/* --- การตั้งค่าพื้นฐาน (เหมือนหน้า Gallery) --- */
+:root {
+    --primary-color: #2E7D32; /* สีเขียวเข้ม */
+    --secondary-color: #E8F5E9; /* สีเขียวอ่อนพื้นหลัง */
+    --text-color: #333;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --border-radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 100%;   /*เปลี่ยนจาก 800px เป็น 100% เพื่อให้กว้างเต็มพื้นที่ */
+    margin: 0 auto;
+   /* max-width: 1200px;  ฟอร์มไม่ควรกว้างเท่า Gallery 
+    margin: 0 auto;*/
+}
+
+/* --- ปุ่มกด (Buttons) --- */
+.btn-container {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.btn-back {
+    background-color: #607D8B;
+    color: white;
+}
+.btn-back:hover { background-color: #455A64; }
+
+.btn-save {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-save:hover { background-color: #1B5E20; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+.btn-danger {
+    background-color: #e57373;
+    color: white;
+    margin-left: 10px;
+}
+.btn-danger:hover { background-color: #c62828; }
+
+/* สีสำหรับปุ่ม Info (สีฟ้า) */
+.btn-info {
+    background-color: #0288D1; /* สีฟ้าเข้มสวยๆ */
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #01579B; /* สีฟ้าที่เข้มขึ้นตอนเอาเมาส์ชี้ */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* --- การ์ดฟอร์ม (Form Card) --- */
+.form-card {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.text-muted {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* --- ช่องกรอกข้อมูล (Inputs) --- */
+.field {
+    margin-bottom: 20px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* จัดสไตล์ Input, Select, Textarea */
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Sarabun', sans-serif;
+    transition: border-color 0.3s;
+    background-color: #fafafa;
+}
+
+/* เอฟเฟกต์ตอนกดพิมพ์ */
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+textarea {
+    resize: vertical; /* ย่อขยายแนวตั้งได้ */
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 30px 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+

@@ -1,0 +1,212 @@
+/* =========================================
+   1. Variables & Global Reset
+   ========================================= */
+:root {
+    --primary-green: #2E7D32;
+    --soft-green: #e8f5e9;
+    --accent-yellow: #ffc107;
+    --text-dark: #333;
+    --white: #ffffff;
+    --error-red: #d32f2f;
+    --bg-light: #F9FBE7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+/* ตกแต่งใบไม้จางๆ */
+body::before {
+    content: "🌿";
+    position: fixed;
+    top: 15%;
+    left: 2%;
+    font-size: 6rem;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+body::after {
+    content: "🍃";
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    font-size: 7rem;
+    opacity: 0.1;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+/* =========================================
+   2. Navbar (แถบเมนูบาร์)
+   ========================================= */
+.navbar {
+    background-color: var(--white);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    text-decoration: none;
+}
+.logo span { color: #4CAF50; }
+
+/* =========================================
+   3. Login Page Layout (เน้นขยายขนาดตัวหนังสือ)
+   ========================================= */
+.login-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+.login-card {
+    background: #ffffff;
+    width: 100%;
+    /* ✅ ขยายความกว้างการ์ดขึ้นเล็กน้อยเพื่อให้สมดุลกับตัวอักษร */
+    max-width: 450px; 
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    background: var(--soft-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    margin: 0 auto 20px;
+}
+
+.login-header h2 {
+    color: var(--primary-green);
+    margin: 0;
+    /* ✅ ขยายหัวข้อ Login */
+    font-size: 2rem; 
+}
+
+.login-header p {
+    color: #666;
+    /* ✅ ขยายข้อความคำแนะนำ */
+    font-size: 1.1rem; 
+    margin-top: 10px;
+}
+
+/* Form Styling */
+.input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600;
+    /* ✅ ขยายขนาดชื่อช่องกรอก */
+    font-size: 1.2rem; 
+    color: var(--primary-green);
+}
+
+.input-group input {
+    width: 100%;
+    /* ✅ เพิ่ม Padding ให้ช่องพิมพ์ดูใหญ่ขึ้น */
+    padding: 15px 20px; 
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-family: 'Sarabun', sans-serif;
+    /* ✅ ขยายขนาดตัวหนังสือที่พิมพ์ */
+    font-size: 1.15rem; 
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    /* ✅ ขยายปุ่มให้ใหญ่ขึ้น */
+    padding: 15px; 
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    /* ✅ ขยายตัวหนังสือในปุ่ม */
+    font-size: 1.25rem; 
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #1B5E20;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(27, 94, 32, 0.3);
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.login-footer a {
+    color: #888;
+    /* ✅ ขยายลิงก์กลับหน้าแรก */
+    font-size: 1.1rem; 
+}
+
+.login-footer a:hover {
+    color: var(--primary-green);
+    text-decoration: underline;
+}
+
+/* =========================================
+   4. Footer
+   ========================================= */
+.footer {
+    background-color: #1a1a1a;
+    color: #bbb;
+    text-align: center;
+    padding: 40px 20px;
+}
+.footer p { font-size: 1rem; }

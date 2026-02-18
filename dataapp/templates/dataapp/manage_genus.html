@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dataapp/css/styletable.css' %}">
+  
+  <title>จัดการข้อมูลสกุลพืช</title>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="">🌿 Dalbergia Manager</a>
+
+      <ul class="nav-links">
+        <li><a href="{% url 'addgenu' %}">เพิ่มข้อมูลสกุลพืช</a></li>
+        <li><a href="{% url 'mndata' %}">หน้าหลัก</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container my-2">
+    <section class="card">
+        
+      <div class="card-header">
+          <h2 class="page-title">🍃 ข้อมูลสกุลพืช (Genus)</h2>
+          
+        <form class="search-bar" method="get" action="{% url 'genusearch' %}">
+          <input 
+            type="text" 
+            name="name" 
+            class="search-input" 
+            placeholder=""
+            value="{{ request.GET.name }}"
+            required 
+            oninvalid="this.setCustomValidity('กรอกข้อมูลค้นหา')" 
+            oninput="this.setCustomValidity('')"
+          >
+          <button type="submit" class="btn btn-search">ค้นหา</button>
+        </form>
+      </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+              {% if messages %}
+                  {% for message in messages %}
+                      <script>
+                          Swal.fire({
+                              title: 'สำเร็จ!',          // หัวข้อ
+                              text: '{{ message }}',     // ข้อความจาก views.py (บันทึกข้อมูลเรียบร้อย)
+                              icon: 'success',           // ไอคอน (success, error, warning, info)
+                              confirmButtonText: 'ตกลง',  // ข้อความปุ่ม
+                              confirmButtonColor: '#3085d6' // สีปุ่ม
+                          });
+                      </script>
+                  {% endfor %}
+              {% endif %}
+
+      <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" width="10%">รหัส</th>
+                <th scope="col" width="30%">ชื่อสกุลพืช</th>
+                <th scope="col" width="40%">หมายเหตุ</th>
+                <th scope="col" width="10%">แก้ไข</th>
+                <th scope="col" width="10%">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for gg in genus %}
+              <tr>
+                <td scope="row" class="text-center"><b>{{ gg.genus_id }}</b></td>
+                <td class="text-italic" style="font-size: 1.1rem; color: var(--primary-dark);">
+                    {{ gg.genus_name }}
+                </td>
+                <td class="text-desc">{{ gg.remarks }}</td>
+                
+                <td>
+                    <a href="{% url 'updatege' gg.genus_id %}" class="btn btn-info btn-sm">
+                       แก้ไข
+                    </a>
+                </td>
+                
+                <td>
+                  <a href="{% url 'genusde' gg.genus_id %}" class="btn btn-danger btn-sm"
+                     onclick="return confirm('คุณต้องการลบ {{ gg.genus_name }} หรือไม่ ?')">
+                     ลบ
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                  <td colspan="5" class="text-center empty-row">
+                      ❌ ยังไม่มีข้อมูลสกุลพืช
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,235 @@
+/* --- 1. ตั้งค่าพื้นฐาน (Base) --- */
+:root {
+    --primary-color: #2E7D32;  /* สีเขียวหลัก */
+    --primary-dark: #1B5E20;   /* สีเขียวเข้ม */
+    --bg-color: #E8F5E9;       /* สีพื้นหลัง */
+    --white: #ffffff;
+    --text-color: #333;
+    --border-color: #ddd;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding-top: 80px; 
+}
+
+a { text-decoration: none; }
+ul { list-style: none; padding: 0; margin: 0; }
+
+/* ✅ แก้ไข 1: ปรับ Container ให้กว้างเกือบเต็มจอ (95%) */
+.container {
+    max-width: 90%;  /* เปลี่ยนจาก 1200px เป็น 95% หรือ 100% */
+    margin: 0 auto;
+    /*padding: 0 0px;*/
+}
+
+.my-2 {
+    margin-top: 1rem;    /* เว้นด้านบน */
+    margin-bottom: 2rem; /* เว้นด้านล่าง */
+}
+
+/* --- 2. Navbar --- */
+.site-header {
+    background-color: var(--primary-color);
+    padding: 15px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover { color: #FFEB3B; }
+.menu-toggle, .hamburger { display: none; }
+
+/* --- 3. Card & Layout --- */
+.card {
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 50px;
+    /* เพิ่มเพื่อให้การ์ดเต็มพื้นที่ */
+    width: 100%; 
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.page-title {
+    color: var(--primary-color);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+/* --- 4. Search Bar --- */
+.search-bar { display: flex; gap: 10px; }
+
+.search-input {
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    outline: none;
+    font-family: 'Sarabun', sans-serif;
+    width: 250px;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.btn-search {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.btn-search:hover { background-color: var(--primary-dark); }
+
+/* --- 5. Table Styling --- */
+.table-responsive { overflow-x: auto; }
+
+.table {
+    width: 100%; /* ตารางเต็มความกว้าง */
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table thead th {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+.table thead th:first-child { border-top-left-radius: 10px; }
+.table thead th:last-child { border-top-right-radius: 10px; }
+
+.table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.table tbody tr:hover { background-color: #f1f8e9; }
+
+.text-center { text-align: center; }
+.text-italic { font-style: italic; color: #555; }
+.text-desc { color: #666; font-size: 0.95rem; }
+
+.badge {
+    background-color: #E0F2F1;
+    color: #00695C;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.empty-row { padding: 30px; color: #999; font-size: 1.1rem; }
+
+/* --- 6. ปุ่มกดในตาราง (แก้ไขใหม่ตามโจทย์) --- */
+/* ✅ แก้ไข 2, 3, 4: พื้นขาว ขอบเขียว ขนาดเท่ากัน */
+
+/* ล้างค่าสีเดิมของปุ่ม (Warning/Info/Danger) ในตาราง */
+.table .btn {
+    text-decoration: none;
+    display: inline-flex;  /* จัดไอคอนกับตัวหนังสือให้อยู่กลาง */
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* ระยะห่างไอคอนกับตัวหนังสือ */
+    
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.9rem;
+    padding: 8px 10px;
+    transition: all 0.3s ease;
+
+    /* กำหนดสีพื้นฐาน (ขาว ขอบเขียว) */
+    background-color: #ffffff;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+
+    /* กำหนดขนาดให้เท่ากัน */
+    min-width: 100px; 
+}
+
+/* ✅ แก้ไข 3: Hover แล้วเปลี่ยนเป็นพื้นเขียว ตัวขาว */
+.table .btn:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2);
+}
+
+/* (Optional) ถ้าอยากให้ปุ่มลบ เป็นขอบแดงเหมือนเดิม ให้เพิ่มโค้ดด้านล่างนี้ */
+/* .table .btn-danger {
+    border-color: #ef5350;
+    color: #ef5350;
+}
+.table .btn-danger:hover {
+    background-color: #ef5350;
+    color: white;
+} 
+*/
+
+/* --- 7. Alerts --- */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+
+.btn-container { margin-bottom: 20px; }
+    .btn-back {
+        background-color: #27512e;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: inline-block;
+    }
+    .btn-back:hover { background-color: #a8ef98; color: #000000; }

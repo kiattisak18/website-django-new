@@ -1,0 +1,92 @@
+/* knowledge_detail.css */
+
+.knowledge-detail-page {
+    padding-top: 120px; 
+    background-color: #F9FBE7; 
+    min-height: 80vh;
+}
+
+.back-nav {
+    margin-bottom: 25px;
+}
+
+.back-nav a {
+    text-decoration: none; 
+    color: #2E7D32; 
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.back-nav a:hover {
+    color: #1B5E20;
+}
+
+.knowledge-detail-card {
+    background: #ffffff; 
+    padding: 40px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.detail-header {
+    text-align: center; 
+    margin-bottom: 40px;
+}
+
+.publish-date {
+    color: #4CAF50; 
+    font-weight: 700; 
+    font-size: 0.9rem;
+}
+
+.detail-title {
+    font-size: 2.5rem; 
+    color: #2E7D32; 
+    margin: 15px 0; 
+    line-height: 1.3;
+}
+
+.author-info {
+    color: #666; 
+    font-size: 1.1rem;
+}
+
+.detail-content {
+    font-size: 1.2rem; 
+    line-height: 1.8; 
+    color: #444; 
+    white-space: pre-line; /* ✅ สำคัญ: ทำให้เว้นบรรทัดตามที่พิมพ์ใน Admin */
+}
+
+/* ส่วนของการแสดงรูปภาพข่าวที่ถูกล็อคขนาด */
+.detail-image-wrapper {
+    margin: 0 auto 40px; /* จัดกึ่งกลางแนวนอนและเว้นระยะล่าง */
+    text-align: center;
+    width: 100%;
+    max-width: 800px; /* กำหนดความกว้างสูงสุดของพื้นที่รูป */
+}
+
+.detail-image-wrapper img {
+    /* ✅ ล็อคขนาดรูปภาพ (ปรับตัวเลขได้ตามต้องการ) */
+    width: 700px; 
+    height: 450px; 
+    
+    /* ✅ ทำให้รูปไม่เบี้ยวเมื่อถูกบังคับขนาด */
+    object-fit: cover; 
+    
+    /* ✅ จัดรูปให้อยู่กึ่งกลาง */
+    display: block;
+    margin: 0 auto;
+    
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+/* ปรับให้รองรับหน้าจอมือถือ (Responsive) */
+@media (max-width: 768px) {
+    .detail-image-wrapper img {
+        width: 100%; /* บนมือถือให้เต็มจอ */
+        height: 300px; /* ลดความสูงลงเล็กน้อย */
+    }
+}

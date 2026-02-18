@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ plant.thai_name }} - DalbergiaPark</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'dataapp/css/mianstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/knowledge_detail.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'homedata' %}" class="logo">🌿 Dalbergia<span>Park</span></a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link" href="{% url 'homedata' %}">หน้าแรก</a></li>
+                <li><a class="nav-link active" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
+                <li><a class="nav-link" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
+                <li><a class="nav-link btn-login" href="{% url 'formlogin' %}">เข้าสู่ระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="knowledge-detail-page">
+    <div class="container">
+        <div class="back-nav">
+            <a href="{% url 'pagespecies' %}">⬅ กลับไปหน้าข้อมูลต้นไม้</a>
+        </div>
+
+        <article class="knowledge-detail-card">
+            <header class="detail-header">
+                <h1 class="detail-title">{{ plant.thai_name }}</h1>
+                <h3 style="color: #666; font-style: italic;">{{ plant.sci_name }}</h3>
+                <div class="divider-line" style="width: 80px; height: 4px; background-color: #FFC107; margin: 20px auto;"></div>
+            </header>
+
+            <div class="detail-image-wrapper">
+                {% with cover_image=plant.images.first %}
+                    {% if cover_image %}
+                        <img src="{{ cover_image.speciesimage.url }}" alt="{{ plant.thai_name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/700x450" alt="No Image">
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="detail-content">
+                <div style="background: #f1f8e9; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                    <p><strong>ชื่อภาษาไทย:</strong> {{ plant.thai_name }}</p>
+                    <p><strong>ชื่อวิทยาศาสตร์:</strong> <i>{{ plant.sci_name }}</i></p>
+                    <p><strong>สกุล (Genus):</strong> {{ plant.genus.genus_name }}</p>
+                </div>
+
+                <h3 style="color: #2E7D32; margin-bottom: 15px;">🌿 ลักษณะและข้อมูลเพิ่มเติม</h3>
+                <p>{{ plant.description }}</p>
+
+                {% if plant.images.all|length > 1 %}
+                    <h3 style="color: #2E7D32; margin: 40px 0 20px;">🖼️ รูปภาพเพิ่มเติม</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+    
+                        {% for img in plant.images.all|slice:":5" %}
+                            <a href="{{ img.speciesimage.url }}" target="_blank">
+                            <img src="{{ img.speciesimage.url }}" 
+                            style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
+                            </a>
+                        {% endfor %}
+    
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+    </div>
+</footer>
+
+</body>
+</html>

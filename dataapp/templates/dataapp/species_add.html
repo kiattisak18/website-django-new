@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'dataapp/css/newform.css' %}">
+  
+  <title>เพิ่มข้อมูลสายพันธุ์พืช</title>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="btn-container">
+       <a href="{% url 'specidata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="form-card">
+        <header class="form-header">
+            <h2 class="page-title">🌿 แบบฟอร์มเพิ่มข้อมูลสายพันธุ์พืช</h2>
+            <p class="text-muted">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+        </header>
+
+        <form method="post" action="{% url 'addspec' %}">
+          {% csrf_token %}
+
+          <div class="field">
+            <label for="sciname">ชื่อวิทยาศาสตร์</label>
+            <input type="text" name="sciname" id="sciname" placeholder="" required>
+          </div>
+
+          <div class="field">
+            <label for="thainame">ชื่อไทย</label>
+            <input type="text" name="thainame" id="thainame" placeholder="" required>
+          </div>
+
+          <div class="field">
+             <label for="attri">ลักษณะ</label>
+             <textarea name="attri" id="attri" rows="3" placeholder="" required></textarea>
+          </div>
+
+          <div class="field">
+             <label for="typegenus">สกุลพืช</label>
+             <select name="typegenus" id="typegenus" required>
+                <option value="">-- เลือกสกุลพืช --</option>
+                {% for g in genus %}
+                  <option value="{{ g.genus_id }}">
+                   {{ g.genus_name }}
+                  </option>
+                {% endfor %}
+             </select>
+          </div>
+
+          <hr class="divider">
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-save">บันทึกข้อมูล</button>
+            <a href="{% url 'specidata' %}" class="btn btn-danger">ยกเลิก</a>
+          </div>
+        </form>
+    </section>
+
+  </div>
+
+</body>
+</html>

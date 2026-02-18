@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>รายชื่อผู้ดูแลระบบ - DalbergiaPark</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/new_admin.css' %}">
+  
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="#" class="logo">
+            <i class="fas fa-leaf"></i>🌿 Dalbergia Manager
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'mndata' %}">หน้าหลัก</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="admin-list-page">
+    <div class="container">
+        <div class="list-header">
+            <h2>👥 รายชื่อผู้ดูแลระบบ</h2>
+            <a href="{% url 'adminadd' %}" class="btn-add">+ เพิ่มแอดมิน</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <table class="admin-table">
+            <thead>
+    <tr>
+        <th>ID</th>
+        <th>ชื่อผู้ใช้งาน</th>
+        <th>ชื่อ-นามสกุล</th>
+        <th>เข้าใช้งานล่าสุด</th>
+        <th>จัดการ</th> </tr>
+</thead>
+<tbody>
+    {% for admin in admins %}
+    <tr>
+        <td><strong>#{{ admin.admin_id }}</strong></td>
+        <td>{{ admin.user_name }}</td>
+        <td>{{ admin.full_name }}</td>
+        <td>
+            {% if admin.last_login %}
+                <span class="last-login-time">{{ admin.last_login|date:"d/m/Y H:i" }} น.</span>
+            {% else %}
+                <span class="never-logged-in">ยังไม่เคยเข้าใช้งาน</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'admindelete' admin.admin_id %}" 
+               class="btn-delete" 
+               onclick="return confirm('คุณแน่ใจหรือไม่ที่จะลบแอดมินท่านนี้? ข้อมูลจะไม่สามารถกู้คืนได้');">
+               ลบ
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

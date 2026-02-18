@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>เข้าสู่ระบบ - อุทยานพืชสกุลดัลเบียร์เจีย</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/new_login.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'homedata' %}" class="logo">🌿 Dalbergia<span>Park</span></a>
+        <nav>
+            <ul class="nav-menu">
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="login-page">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="icon-circle">🌿</div>
+            <h2>ผู้ดูแลระบบ</h2>
+            <p>กรุณาเข้าสู่ระบบเพื่อจัดการข้อมูลอุทยาน</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'formlogin' %}" class="login-form">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="username">ชื่อผู้ใช้งาน</label>
+                <input type="text" id="username" name="username" placeholder="ระบุชื่อผู้ใช้งาน" autocomplete="off" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">รหัสผ่าน</label>
+                <input type="password" id="password" name="password" placeholder="ระบุรหัสผ่าน" autocomplete="off" required>
+            </div>
+
+            <button type="submit" class="btn-submit">เข้าสู่ระบบ</button>
+        </form>
+        
+        <div class="login-footer">
+            <a href="{% url 'homedata' %}">← กลับหน้าแรก</a>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+/* ชื่อไฟล์: gallery.css */
+
+/* --- 1. การตั้งค่าพื้นฐาน (Reset & Base Styles) --- */
+:root {
+    --primary-color: #2E7D32; /* สีเขียวเข้ม */
+    --secondary-color: #E8F5E9; /* สีเขียวอ่อนพื้นหลัง */
+    --text-color: #333;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* --- 2. ส่วนหัว (Header) --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.sci-name {
+    font-style: italic;
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.info-tag {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* --- 3. ตารางรูปภาพ (Grid Gallery) --- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px;
+    padding-bottom: 50px;
+}
+
+.image-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.image-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.image-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+/* --- 4. กรณีไม่มีข้อมูล (Empty State) --- */
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    color: #888;
+    background: var(--white);
+    border-radius: 15px;
+}
+
+/* --- 5. ปุ่มกด (Buttons) --- */
+.btn-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s;
+    display: inline-block;
+}
+
+.btn-back {
+    background-color: #607D8B;
+    color: white;
+}
+
+.btn-back:hover {
+    background-color: #455A64;
+}
+
+.btn-add {
+    background-color: var(--primary-color);
+    color: white;
+    margin-top: 15px;
+}

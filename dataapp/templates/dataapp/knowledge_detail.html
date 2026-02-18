@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ item.info_headline }} - DalbergiaPark</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/newhome.css' %}">
+    <link rel="stylesheet" href="{% static 'dataapp/css/knowledge_detail.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'homedata' %}" class="logo">
+            🌿 Dalbergia<span>Park</span>
+        </a>
+        <nav>
+            <ul class="nav-menu">
+                <li><a class="nav-link" href="{% url 'homedata' %}">หน้าแรก</a></li>
+                <li><a class="nav-link" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
+                <li><a class="nav-link" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
+                <li><a class="nav-link btn-login" href="{% url 'formlogin' %}">เข้าสู่ระบบ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="knowledge-detail-page">
+    <div class="container">
+        
+        <div class="back-nav">
+            <a href="{% url 'homedata' %}">⬅ กลับหน้าแรก</a>
+        </div>
+
+        <article class="knowledge-detail-card">
+            <header class="detail-header">
+                <span class="publish-date">เผยแพร่เมื่อ: {{ item.info_date|date:"d M Y" }}</span>
+                <h1 class="detail-title">{{ item.info_headline }}</h1>
+                <div class="author-info"><strong>ผู้เขียน:</strong> {{ item.info_creator }}</div>
+                <div class="divider-line" style="width: 80px; height: 4px; background-color: #FFC107; margin: 20px auto; border-radius: 2px;"></div>
+            </header>
+
+            {% if item.info_image %}
+            <div class="detail-image-wrapper">
+                <img src="{{ item.info_image.url }}" alt="{{ item.info_headline }}">
+            </div>
+            {% endif %}
+
+            <div class="detail-content">
+                {{ item.info_content }}
+            </div>
+        </article>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content" style="text-align: center; padding: 40px; background: #1a1a1a; color: #bbb;">
+        <p>© 2025 อุทยานพืชสกุลดัลเบียร์เจีย | พัฒนาเพื่อการศึกษา</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,231 @@
+/* =========================================
+   1. Variables & Global Reset (พื้นฐานและสีหลัก)
+   ========================================= */
+:root {
+    --primary-color: #2E7D32;
+    --secondary-color: #4CAF50;
+    --dark-text: #333333;
+    --gray-text: #666666;
+    --white: #ffffff;
+    --bg-light: #f4f7f6;
+    --shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+/* ตกแต่งใบไม้จางๆ ที่มุมจอเพื่อให้เว็บไม่ดูโล่ง */
+body::before {
+    content: "🌿";
+    position: fixed;
+    top: 20%;
+    left: 2%;
+    font-size: 5rem;
+    opacity: 0.1;
+    z-index: -1;
+    filter: grayscale(100%);
+}
+
+body::after {
+    content: "🍃";
+    position: fixed;
+    bottom: 10%;
+    right: 2%;
+    font-size: 6rem;
+    opacity: 0.1;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+a { text-decoration: none; transition: 0.3s; }
+ul { list-style: none; }
+
+/* =========================================
+   2. Navbar (เมนูบาร์ด้านบน)
+   ========================================= */
+/* =========================================
+   2. Navbar (ปรับเปลี่ยนเป็นสีเขียว)
+   ========================================= */
+.navbar {
+    /* เปลี่ยนจากสีขาวเป็นสีเขียวเข้ม (Primary Color) */
+    background-color: var(--primary-color); 
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ปรับสี Logo ให้เป็นสีขาวเพื่อให้เด่นบนพื้นหลังเขียว */
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white); 
+}
+.logo span { color: var(--accent-color); } /* ใช้สีเหลืองทองที่คำว่า Park */
+
+.nav-menu { display: flex; gap: 15px; align-items: center; }
+
+/* ปรับสีตัวอักษรในเมนูให้เป็นสีขาว */
+.nav-link {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--white); 
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+/* เมื่อนำเมาส์ไปชี้ (Hover) ให้สว่างขึ้นหรือเปลี่ยนเป็นสีเหลืองทอง */
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-color) !important;
+    font-weight: 700;
+}
+
+/* =========================================
+   3. Admin List Container (ปรับให้ใหญ่ขึ้น)
+   ========================================= */
+.admin-list-page {
+    padding: 60px 20px;
+    min-height: 100vh;
+    margin-top: 80px;
+}
+
+.container {
+    max-width: 1200px; /* ✅ ขยายจาก 1000px เป็น 1200px */
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px;      /* ✅ เพิ่มพื้นที่ว่างด้านใน */
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e8f5e9;
+    padding-bottom: 20px;
+}
+
+.list-header h2 {
+    font-size: 2.2rem; /* ✅ ปรับหัวข้อให้ใหญ่ขึ้น */
+    color: #2d5a27;
+    margin: 0;
+}
+
+.btn-add {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 1.1rem; /* ✅ ขยายขนาดปุ่ม */
+    font-weight: 600;
+}
+
+.btn-add:hover {
+    background-color: #1B5E20;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* =========================================
+   4. Admin Table (ปรับขนาดตัวหนังสือและตาราง)
+   ========================================= */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.admin-table th {
+    background-color: #f8faf9;
+    color: #555;
+    font-weight: 700;
+    font-size: 1.1rem;   /* ✅ ขยายหัวตาราง */
+    padding: 20px 15px;   /* ✅ เพิ่มความสูงแถว */
+    text-transform: uppercase;
+    border-bottom: 2px solid #e8f5e9;
+}
+
+.admin-table td {
+    padding: 22px 15px;   /* ✅ เพิ่ม Padding ให้ดูโปร่ง */
+    font-size: 1.15rem;    /* ✅ ขยายตัวหนังสือข้อมูล */
+    color: var(--dark-text);
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.admin-table td strong {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.admin-table tr:hover {
+    background-color: #f1f8f1;
+}
+
+/* การจัดการคอลัมน์สุดท้าย (ปุ่มลบ) */
+.admin-table td:last-child {
+    text-align: center;
+}
+
+.btn-delete {
+    background-color: #d32f2f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.btn-delete:hover {
+    background-color: #b71c1c;
+    box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+}
+
+.last-login-time { font-size: 1.05rem; color: #444; }
+.never-logged-in { font-size: 1.05rem; color: #999; font-style: italic; }
+
+/* =========================================
+   5. Alerts (การแจ้งเตือน)
+   ========================================= */
+.alert {
+    padding: 18px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}

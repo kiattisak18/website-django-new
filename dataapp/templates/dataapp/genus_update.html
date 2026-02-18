@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'dataapp/css/newform.css' %}">
+  
+  <title>แก้ไขข้อมูลสกุลพืช</title>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="btn-container">
+      <a href="{% url 'genusdata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+    </div>
+
+    <section class="form-card">
+        <header class="form-header">
+            <h2 class="page-title">✏️ แบบฟอร์มแก้ไขข้อมูลสกุลพืช</h2>
+            <p class="text-muted">กำลังแก้ไข: {{ gen.genus_name }}</p>
+        </header>
+
+        <form method="post" action="">
+          {% csrf_token %}
+
+          <div class="field">
+            <label for="genusid">รหัสสกุลพืช</label>
+            <input type="text" name="genusid" id="genusid" 
+                   value="{{ gen.genus_id }}" readonly 
+                   style="background-color: #e9ecef; cursor: not-allowed; color: #666;">
+          </div>
+
+          <div class="field">
+            <label for="thainame">ชื่อสกุลพืช</label>
+            <input type="text" name="genusname" id="thainame" 
+                   value="{{ gen.genus_name }}" required>
+          </div>
+
+          <div class="field">
+            <label for="sciname">หมายเหตุ</label>
+            <input type="text" name="remark" id="sciname" 
+                   value="{{ gen.remarks }}" required>
+          </div>
+
+          <hr class="divider">
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-save">บันทึกการแก้ไข</button>
+            
+            <a href="{% url 'genusdata' %}" class="btn btn-danger">ยกเลิก</a>
+          </div>
+
+        </form>
+    </section>
+
+  </div>
+
+</body>
+</html>

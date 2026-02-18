@@ -1,0 +1,53 @@
+{% load static %} <!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังรูปภาพ: {{ species.thai_name }}</title>
+    <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'dataapp/css/styleimage.css' %}">
+    
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="btn-container" style="text-align: left;">
+            <a href="{% url 'specidata' %}" class="btn btn-back">⬅ กลับหน้าตารางข้อมูล</a>
+        </div>
+
+        <header>
+            <h1>{{ species.thai_name }}</h1>
+            <div class="sci-name">{{ species.sci_name }}</div>
+            
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <span class="info-tag">สกุล: {{ species.genus.genus_name }}</span>
+                {% if species.description %}
+                    <span class="info-tag" style="background-color: #8D6E63;">ลักษณะ: {{ species.description }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if images %}
+            <div class="gallery-grid">
+                {% for img in images %}
+                <div class="image-card">
+                    <a href="{{ img.speciesimage.url }}" target="_blank">
+                        <img src="{{ img.speciesimage.url }}" alt="{{ species.thai_name }}">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p style="font-size: 1.5rem;">📷 ยังไม่มีรูปภาพสำหรับสายพันธุ์นี้</p>
+                <a href="{% url 'speciesimage' %}" class="btn btn-add">เพิ่มรูปภาพตอนนี้</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

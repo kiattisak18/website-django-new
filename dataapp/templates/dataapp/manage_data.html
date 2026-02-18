@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบจัดการข้อมูลพืช</title>
+  <link rel="icon" type="image/png" href="{% static 'dataapp/img/logoweb2.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <link rel="stylesheet" href="{% static 'dataapp/css/newmanagedata.css' %}">
+
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="">
+        <i class="fas fa-leaf"></i> Dalbergia Manager
+      </a>
+      <ul class="nav-links">
+        <li>
+            <a href="{% url 'adminlogout' %}" class="btn-logout" 
+              onclick="return confirm('คุณต้องการออกจากระบบใช่หรือไม่?');">
+              <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg" style="background: linear-gradient(135deg, #1B5E20, #4CAF50);"></div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">ระบบจัดการฐานข้อมูล</h1>
+      <p class="hero-subtitle">เลือกเมนูที่ต้องการจัดการ เพื่อเพิ่ม ลบ หรือแก้ไขข้อมูลในระบบ</p>
+    </div>
+  </section>
+
+  <section class="dashboard-container">
+    <div class="grid-menu">
+      
+      <a href="{% url 'genusdata' %}" class="menu-card">
+        <div class="icon-box">
+          <i class="fas fa-tree"></i>
+        </div>
+        <h3 class="card-title">จัดการสกุลพืช</h3>
+        <p class="card-desc"></p>
+      </a>
+
+      <a href="/manage_species" class="menu-card">
+        <div class="icon-box">
+          <i class="fas fa-seedling"></i>
+        </div>
+        <h3 class="card-title">จัดการสายพันธุ์พืช</h3>
+        <p class="card-desc"></p>
+      </a>
+
+      <a href="/manage_info" class="menu-card">
+        <div class="icon-box">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <h3 class="card-title">จัดการความรู้</h3>
+        <p class="card-desc"></p>
+      </a>
+
+      <a href="/add_model" class="menu-card">
+        <div class="icon-box">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3 class="card-title">จัดการโมเดล</h3>
+        <p class="card-desc"></p>
+      </a>
+
+      <a href="{% url 'adminmanage' %}" class="menu-card">
+        <div class="icon-box">
+          <i class="fas fa-user-cog"></i>
+        </div>
+        <h3 class="card-title">จัดการแอดมิน</h3>
+        <p class="card-desc"></p>
+      </a>
+    </div>
+  </section>
+
+</body>
+</html>
