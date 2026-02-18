@@ -351,26 +351,38 @@ def predictplant(request):
             fs = FileSystemStorage()
             filename = fs.save(img_file.name, img_file)
             image_url = fs.url(filename) 
+            
             model_path = get_latest_model()
             if not model_path:
                 result = "ไม่พบไฟล์โมเดลในระบบ (.h5 หรือ .keras)"
             else:
-                model = tf.keras.models.load_model(model_path)
+                # ✅ 1. ใช้ tf.keras.models.load_model แทน และเพิ่ม compile=False แก้ Error ที่พีทเจอ
+                model = tf.keras.models.load_model(model_path, compile=False)
+                
                 img = PILImage.open(fs.path(filename)).convert("RGB")
                 img = img.resize((224, 224))
-                img_array = image.img_to_array(img)
+
+                # ✅ 2. เปลี่ยนมาใช้ tf.keras.preprocessing.image แทนการเรียก image เฉยๆ
+                img_array = tf.keras.preprocessing.image.img_to_array(img)
                 img_array = np.expand_dims(img_array, axis=0)
-                img_array = preprocess_input(img_array)
+                
+                # ✅ 3. ใช้ preprocess_input ตามที่ import ไว้ (หรือ tf.keras.applications.vgg16.preprocess_input)
+                img_array = tf.keras.applications.vgg16.preprocess_input(img_array)
+
                 predictions = model.predict(img_array)
                 result_index = np.argmax(predictions[0])
+
                 if result_index < len(CLASS_NAMES):
                     result = CLASS_NAMES[result_index]
                     confidence = f"{np.max(predictions[0]) * 100:.2f}%"
                 else:
                     result = "ไม่ทราบชนิด"
+                    
         except Exception as e:
+            # พิมพ์ Error ออกมาดูใน Log ของ Render ด้วย
+            print(f"Prediction Error: {e}")
             result = f"เกิดข้อผิดพลาด: {str(e)}"
-    # แก้ไขเป็น /
+            
     return render(request, 'dataapp/classify_page.html', {
             'result': result,
             'confidence': confidence,
