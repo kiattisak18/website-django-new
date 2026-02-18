@@ -509,6 +509,83 @@ def downloadselectedimages(request):
         response['Content-Disposition'] = 'attachment; filename="plants_collection.zip"'
         return response
     
-    
+# ฟังก์ชันสำหรับลบโมเดล
+def delete_model(request, filename):
+    if request.method == 'POST':
+        file_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models', filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            messages.success(request, f'ลบไฟล์ {filename} เรียบร้อยแล้ว')
+        else:
+            messages.error(request, 'ไม่พบไฟล์ที่ต้องการลบ')
+    return redirect('addmodel')
+
+def adminlogincode(request):
+    if request.method == "POST":
+        user_in = request.POST.get('username')
+        pass_in = request.POST.get('password')
+
+        try:
+            admin = AdminUser.objects.get(user_name=user_in)
+            # ตรวจสอบโดยการคำนวณเปรียบเทียบ
+            if check_password(pass_in, admin.password):
+                request.session['admin_id'] = admin.admin_id
+                admin.last_login = timezone.now()
+                admin.save()
+                return redirect('mndata')
+            else:
+                messages.error(request, "รหัสผ่านไม่ถูกต้อง")
+        except AdminUser.DoesNotExist:
+            messages.error(request, "ไม่พบชื่อผู้ใช้งานนี้")
+            
+    return render(request, 'dataapp/login_form.html')
+
+def addadmincode(request):
+    if request.method == "POST":
+        u_name = request.POST.get('user_name')
+        p_word = request.POST.get('password')
+        f_name = request.POST.get('full_name')
+
+        if AdminUser.objects.filter(user_name=u_name).exists():
+            messages.error(request, "ชื่อผู้ใช้งานนี้มีคนใช้แล้ว")
+        else:
+            # เข้ารหัสก่อนบันทึกลง MySQL
+            hashed_p = make_password(p_word) 
+            AdminUser.objects.create(
+                user_name=u_name, 
+                password=hashed_p, 
+                full_name=f_name
+            )
+            messages.success(request, "เพิ่มแอดมินใหม่สำเร็จ!")
+            return redirect('adminadd')
+    return render(request, 'dataapp/add_admin.html')
+
+@admin_required
+def deleteadmin(request, admin_id):
+    # ป้องกันไม่ให้แอดมินลบตัวเอง (ทางเลือก)
+    if admin_id == request.session.get('admin_id'):
+        messages.error(request, "คุณไม่สามารถลบบัญชีของตัวเองได้ในขณะที่ใช้งานอยู่")
+        return redirect('adminmanage')
+
+    try:
+        admin = AdminUser.objects.get(admin_id=admin_id)
+        admin.delete()
+        messages.success(request, "ลบข้อมูลผู้ดูแลระบบเรียบร้อยแล้ว")
+    except AdminUser.DoesNotExist:
+        messages.error(request, "ไม่พบข้อมูลที่ต้องการลบ")
+        
+    return redirect('adminmanage')
+
+def admin_logout(request):
+    # ล้างข้อมูล Session ทั้งหมด (admin_id, admin_name ฯลฯ)
+    request.session.flush()
+    # ส่งข้อความแจ้งเตือน (ถ้าต้องการ)
+    messages.success(request, "ออกจากระบบเรียบร้อยแล้ว")
+    # ดีดกลับไปหน้า Login
+    return redirect('formlogin')
+
+
+
+
 
 

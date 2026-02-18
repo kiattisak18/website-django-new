@@ -45,3 +45,4 @@ urlpatterns = [
     path('delete_admin/<int:admin_id>/', views.deleteadmin, name='admindelete'),
     path('logout/', views.admin_logout, name='adminlogout'),
 ]
+
