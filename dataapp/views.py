@@ -18,6 +18,7 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from PIL import Image as PILImage
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
+import tensorflow as tf
 # --- ส่วนที่ 1: โหลดโมเดลไว้ที่ระดับ Global ---
 # ระบุตำแหน่งไฟล์ให้ถูกต้องตามโครงสร้างที่สร้างไว้
 
@@ -423,8 +424,8 @@ def testaddspecies(request):
 
 # --- ส่วนที่ 1: โหลดโมเดลไว้ที่ระดับ Global ---
 # ระบุตำแหน่งไฟล์ให้ถูกต้องตามโครงสร้างที่สร้างไว้
-MODEL_PATH = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models', 'classify_plant_model.keras')
-model = load_model(MODEL_PATH)
+#MODEL_PATH = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models', 'classify_plant_model.keras')
+#model = load_model(MODEL_PATH)
 
 def Expredictplant(request):
     result = None
@@ -458,12 +459,21 @@ def Expredictplant(request):
         'confidence': confidence
         })
 
+def get_latest_model():
+    save_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models')
+    # ตรวจสอบว่ามีไฟล์ .keras หรือ .h5 อยู่หรือไม่
+    for ext in ['.keras', '.h5']:
+        path = os.path.join(save_path, f'classify_plant_model{ext}')
+        if os.path.exists(path):
+            return path
+    return None
 
 CLASS_NAMES = ['กระพี้นางนวล', 'พะยูง', 'เกร็ดแดง', 'เครือคางควาย', 'เครือแมด']
 def predictplant(request):
     result = None
     confidence = None
-    image_url = None # ⭐ เพิ่ม
+    image_url = None 
+
     if request.method == 'POST' and request.FILES.get('plant_image'):
         try:
             img_file = request.FILES['plant_image']
@@ -471,35 +481,43 @@ def predictplant(request):
             # ✅ 1. บันทึกรูป
             fs = FileSystemStorage()
             filename = fs.save(img_file.name, img_file)
-            image_url = fs.url(filename) # ⭐ URL สำหรับแสดงผล
+            image_url = fs.url(filename) 
 
-
-            # ✅ 2. โหลดรูปจากไฟล์ที่ save แล้ว
-            img = PILImage.open(fs.path(filename)).convert("RGB")
-            img = img.resize((224, 224))
-
-
-            img_array = image.img_to_array(img)
-            img_array = np.expand_dims(img_array, axis=0)
-            img_array = preprocess_input(img_array)
-
-
-            predictions = model.predict(img_array)
-            result_index = np.argmax(predictions[0])
-
-
-            if result_index < len(CLASS_NAMES):
-                result = CLASS_NAMES[result_index]
-                confidence = f"{np.max(predictions[0]) * 100:.2f}%"
+            # ✅ 2. ค้นหาและโหลดโมเดล (ใช้ฟังก์ชันที่เราสร้างไว้)
+            model_path = get_latest_model()
+            
+            if not model_path:
+                result = "ไม่พบไฟล์โมเดลในระบบ (.h5 หรือ .keras)"
             else:
-                result = "ไม่ทราบชนิด"
+                # โโหลดโมเดลจากตำแหน่งที่พบจริง
+                model = tf.keras.models.load_model(model_path)
+
+                # ✅ 3. เตรียมรูปภาพ
+                img = PILImage.open(fs.path(filename)).convert("RGB")
+                img = img.resize((224, 224))
+
+                img_array = image.img_to_array(img)
+                img_array = np.expand_dims(img_array, axis=0)
+                img_array = preprocess_input(img_array)
+
+                # ✅ 4. ทำนายผล
+                predictions = model.predict(img_array)
+                result_index = np.argmax(predictions[0])
+
+                if result_index < len(CLASS_NAMES):
+                    result = CLASS_NAMES[result_index]
+                    confidence = f"{np.max(predictions[0]) * 100:.2f}%"
+                else:
+                    result = "ไม่ทราบชนิด"
+                    
         except Exception as e:
-            print(e)
-            result = "เกิดข้อผิดพลาดในการประมวลผลรูปภาพ"
+            print(f"Error: {e}")
+            result = f"เกิดข้อผิดพลาด: {str(e)}"
+            
     return render(request, 'dataapp/classify_page.html', {
             'result': result,
             'confidence': confidence,
-            'image_url': image_url, # ⭐ ส่งไป template
+            'image_url': image_url,
         })
     
 def testaddmodel(request):
@@ -554,6 +572,39 @@ def delete_model(request, filename):
 
 # แก้ไขฟังก์ชัน update_model เดิม
 def addmodel(request):
+    save_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models')
+    
+    # 1. ดึงรายชื่อไฟล์มาแสดง (กรองเฉพาะ .h5 และ .keras)
+    model_files = []
+    if os.path.exists(save_path):
+        model_files = [f for f in os.listdir(save_path) 
+                       if f.startswith('classify_plant_model') and f.lower().endswith(('.h5', '.keras'))]
+
+    if request.method == 'POST' and request.FILES.get('new_model'):
+        new_model_file = request.FILES['new_model']
+        extension = os.path.splitext(new_model_file.name)[1].lower()
+        
+        # 2. ตรวจสอบนามสกุลไฟล์ (อนุญาตแค่ .h5 และ .keras)
+        if extension not in ['.h5', '.keras']:
+            # คุณอาจจะเพิ่ม messages.error แจ้งเตือนผู้ใช้ตรงนี้ได้
+            return redirect('addmodel')
+
+        # 3. ลบไฟล์เก่าทิ้ง "ทุกนามสกุล" ที่ขึ้นต้นด้วยชื่อนี้ เพื่อป้องกันไฟล์ซ้ำซ้อน
+        for old_file in os.listdir(save_path):
+            if old_file.startswith('classify_plant_model'):
+                os.remove(os.path.join(save_path, old_file))
+
+        # 4. บันทึกไฟล์ใหม่ลงไป
+        filename = f'classify_plant_model{extension}'
+        fs = FileSystemStorage(location=save_path)
+        fs.save(filename, new_model_file)
+        return redirect('addmodel')
+
+    return render(request, 'dataapp/add_model.html', {
+        'model_files': model_files
+    })
+
+def Oldaddmodel(request):
     save_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models')
     
     # ดึงรายชื่อไฟล์มาแสดง
