@@ -84,23 +84,26 @@ if os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
-    # --- เพิ่มส่วนนี้เข้าไปครับ ---
+    # แก้ไขส่วน OPTIONS เป็นแบบนี้ครับ
     DATABASES['default']['OPTIONS'] = {
-        'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'}
+        'ssl_mode': 'REQUIRED', # บังคับใช้ SSL
+        'ssl': {
+            'ca': None, # ไม่ระบุไฟล์ใบรับรอง (ให้ระบบข้ามการตรวจสอบ chain)
+        }
     }
-    # --------------------------
 else:
-    # อันนี้คือค่าเดิมที่รันในเครื่อง (Local)
+    # ค่าเดิมในเครื่อง (Local)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'your_local_db',
             'USER': 'root',
-            'PASSWORD': 'your_password', # ในเครื่องพีทน่าจะเป็น pete123
+            'PASSWORD': 'your_password',
             'HOST': '127.0.0.1',
             'PORT': '3306',
         }
     }
+
 
 
 
