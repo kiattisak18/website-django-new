@@ -80,23 +80,28 @@ WSGI_APPLICATION = 'WebsiteProject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
 if os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
+    # --- เพิ่มส่วนนี้เข้าไปครับ ---
+    DATABASES['default']['OPTIONS'] = {
+        'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'}
+    }
+    # --------------------------
 else:
-    # อันนี้คือค่าเดิมที่รันในเครื่อง (Local) ของคุณ
+    # อันนี้คือค่าเดิมที่รันในเครื่อง (Local)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'your_local_db',
             'USER': 'root',
-            'PASSWORD': 'your_password',
+            'PASSWORD': 'your_password', # ในเครื่องพีทน่าจะเป็น pete123
             'HOST': '127.0.0.1',
             'PORT': '3306',
         }
     }
+
 
 
 
