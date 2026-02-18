@@ -508,5 +508,7 @@ def downloadselectedimages(request):
         response = HttpResponse(buffer, content_type='application/zip')
         response['Content-Disposition'] = 'attachment; filename="plants_collection.zip"'
         return response
+    
+    
 
 
