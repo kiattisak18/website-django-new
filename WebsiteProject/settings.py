@@ -81,26 +81,24 @@ WSGI_APPLICATION = 'WebsiteProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if IS_PRODUCTION:
-    # ใช้ MySQL จาก Aiven บน Cloud
+if os.environ.get('DATABASE_URL'):
     DATABASES = {
-        'default': dj_database_url.config(
-            default=os.getenv('DATABASE_URL'),
-            conn_max_age=600,
-        )
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
 else:
-    # ใช้ MySQL ในเครื่องคุณ (ค่าเดิมที่คุณส่งมา)
+    # อันนี้คือค่าเดิมที่รันในเครื่อง (Local) ของคุณ
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'websitedata',
+            'NAME': 'your_local_db',
             'USER': 'root',
-            'PASSWORD': 'pete123',
-            'HOST': 'localhost',
+            'PASSWORD': 'your_password',
+            'HOST': '127.0.0.1',
             'PORT': '3306',
         }
     }
+
+
 
 
 # Password validation
