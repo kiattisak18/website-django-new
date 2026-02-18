@@ -475,3 +475,38 @@ def manageadmin(request):
     # แก้ไขเป็น /
     return render(request, 'dataapp/manage_admin.html', {'admins': admins})
 
+def downloadselectedimages(request):
+    if request.method == "POST":
+        selected_ids = request.POST.getlist('selected_images')
+        
+        # ตรวจสอบว่ามีการเลือกรูปจริงไหม
+        if not selected_ids:
+            return HttpResponse("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป")
+
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, 'w') as zip_file:
+            # ดึงข้อมูลรูปภาพ (ตรวจสอบชื่อฟิลด์ id ให้ตรงกับ Model ของคุณ)
+            images = Image.objects.filter(id__in=selected_ids)
+            
+            for img in images:
+                if img.speciesimage and os.path.exists(img.speciesimage.path):
+                    file_path = img.speciesimage.path
+                    file_name = os.path.basename(file_path)
+                    # เขียนไฟล์ลงใน ZIP
+                    zip_file.write(file_path, file_name)
+                else:
+                    # กรณีหาไฟล์จริงในเครื่องไม่เจอ
+                    print(f"File not found: {img.speciesimage.name}")
+
+        # สำคัญ: ต้องอยู่หลังปิด with zip_file
+        buffer.seek(0)
+        
+        # ตรวจสอบขนาดของ buffer ถ้าเป็น 0 แสดงว่าไม่มีไฟล์ถูกเขียนลงไป
+        if buffer.getbuffer().nbytes == 0:
+            return HttpResponse("ไม่สามารถสร้างไฟล์ ZIP ได้เนื่องจากไม่พบไฟล์ต้นฉบับในระบบ")
+
+        response = HttpResponse(buffer, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="plants_collection.zip"'
+        return response
+
+
