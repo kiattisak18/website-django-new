@@ -11,9 +11,6 @@ import io
 import os
 import numpy as np
 from django.conf import settings
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.vgg16 import preprocess_input
 from PIL import Image as PILImage
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
@@ -331,13 +328,22 @@ def testaddspecies(request):
         return render(request, "dataapp/testadd.html", {"genus": gn})
 
 def get_latest_model():
-    # ในฟังก์ชันจัดการไฟล์ Linux จะใช้ / หรือแนะนำให้ใช้ os.path.join เพื่อความปลอดภัยสูงสุด
+    # กำหนดเส้นทางไปยังโฟลเดอร์ ml_models
     save_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models')
-    for ext in ['.keras', '.h5']:
+    
+    # รายการนามสกุลไฟล์ที่ต้องการค้นหาตามขอบเขตโครงงาน
+    extensions = ['.keras', '.h5']
+    
+    for ext in extensions:
+        # สร้างเส้นทางไฟล์แบบเต็ม เช่น .../ml_models/classify_plant_model.keras
         path = os.path.join(save_path, f'classify_plant_model{ext}')
+        
+        # ถ้าเจอไฟล์ที่มีอยู่จริง ให้คืนค่าเส้นทางนั้นกลับไป
         if os.path.exists(path):
             return path
-    return None
+            
+    return None # หากไม่เจอเลยทั้งสองนามสกุล
+
 
 CLASS_NAMES = ['กระพี้นางนวล', 'พะยูง', 'เกร็ดแดง', 'เครือคางควาย', 'เครือแมด']
 
@@ -354,19 +360,19 @@ def predictplant(request):
             
             model_path = get_latest_model()
             if not model_path:
-                result = "ไม่พบไฟล์โมเดลในระบบ (.h5 หรือ .keras)"
+                result = "ไม่พบไฟล์โมเดลในระบบ (.keras)"
             else:
-                # ✅ 1. ใช้ tf.keras.models.load_model แทน และเพิ่ม compile=False แก้ Error ที่พีทเจอ
+                # ✅ แก้ไขตรงนี้: เพิ่ม compile=False เพื่อข้ามปัญหา Config ไม่ตรงกัน
+                # และถ้ายังไม่ได้ ให้ลองใช้ keras.models.load_model(model_path, compile=False)
                 model = tf.keras.models.load_model(model_path, compile=False)
                 
                 img = PILImage.open(fs.path(filename)).convert("RGB")
                 img = img.resize((224, 224))
 
-                # ✅ 2. เปลี่ยนมาใช้ tf.keras.preprocessing.image แทนการเรียก image เฉยๆ
                 img_array = tf.keras.preprocessing.image.img_to_array(img)
                 img_array = np.expand_dims(img_array, axis=0)
                 
-                # ✅ 3. ใช้ preprocess_input ตามที่ import ไว้ (หรือ tf.keras.applications.vgg16.preprocess_input)
+                # ตรวจสอบว่าพีทใช้ VGG16 จริงหรือไม่ ถ้าใช่บรรทัดนี้ถูกต้องแล้ว
                 img_array = tf.keras.applications.vgg16.preprocess_input(img_array)
 
                 predictions = model.predict(img_array)
@@ -374,12 +380,12 @@ def predictplant(request):
 
                 if result_index < len(CLASS_NAMES):
                     result = CLASS_NAMES[result_index]
+                    # แสดงค่าความเชื่อมั่น
                     confidence = f"{np.max(predictions[0]) * 100:.2f}%"
                 else:
                     result = "ไม่ทราบชนิด"
                     
         except Exception as e:
-            # พิมพ์ Error ออกมาดูใน Log ของ Render ด้วย
             print(f"Prediction Error: {e}")
             result = f"เกิดข้อผิดพลาด: {str(e)}"
             
@@ -481,6 +487,7 @@ def addadmin(request):
     # แก้ไขเป็น /
     return render(request, 'dataapp/add_admin.html')
 
+@admin_required
 def manageadmin(request):
     admins = AdminUser.objects.all() 
     # แก้ไขเป็น /
@@ -522,6 +529,7 @@ def downloadselectedimages(request):
         return response
     
 # ฟังก์ชันสำหรับลบโมเดล
+@admin_required
 def delete_model(request, filename):
     if request.method == 'POST':
         file_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models', filename)
@@ -552,6 +560,7 @@ def adminlogincode(request):
             
     return render(request, 'dataapp/login_form.html')
 
+@admin_required
 def addadmincode(request):
     if request.method == "POST":
         u_name = request.POST.get('user_name')
