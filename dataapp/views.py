@@ -481,11 +481,11 @@ def addadmin(request):
     # แก้ไขเป็น /
     return render(request, 'dataapp/add_admin.html')
 
-@admin_required
 def manageadmin(request):
     admins = AdminUser.objects.all() 
     # แก้ไขเป็น /
     return render(request, 'dataapp/manage_admin.html', {'admins': admins})
+
 
 def downloadselectedimages(request):
     if request.method == "POST":
