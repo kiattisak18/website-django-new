@@ -24,7 +24,7 @@
                 <li><a class="nav-link {% if request.resolver_match.url_name == 'homedata' %}active{% endif %}" href="{% url 'homedata' %}">หน้าแรก</a></li>
                 <li><a class="nav-link {% if request.resolver_match.url_name == 'pagespecies' %}active{% endif %}" href="{% url 'pagespecies' %}">ข้อมูลต้นไม้</a></li>
                 <li><a class="nav-link {% if request.resolver_match.url_name == 'pageorganization' %}active{% endif %}" href="{% url 'classify' %}">จำแนกสายพันธุ์พืช</a></li>
-                <li><a class="nav-link btn-login" href="{% url 'formlogin' %}">เข้าสู่ระบบ</a></li>
+                <li><a class="nav-link btn-login" href="{% url 'mndata' %}">เข้าสู่ระบบ</a></li>
             </ul>
         </nav>
     </div>
