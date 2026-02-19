@@ -400,27 +400,47 @@ def testaddmodel(request):
     return render(request,"dataapp/add_model.html")
 
 def addmodel(request):
+    # กำหนดเส้นทางไปยังโฟลเดอร์เก็บโมเดล
     save_path = os.path.join(settings.BASE_DIR, 'dataapp', 'ml_models')
+    
+    # ✅ เพิ่มส่วนตรวจสอบและสร้างโฟลเดอร์อัตโนมัติ (เผื่อกรณีโฟลเดอร์หายไปบน Render)
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
     model_files = []
+    # ดึงรายชื่อไฟล์ที่มีอยู่เพื่อนำไปแสดงผลในหน้าเว็บ
     if os.path.exists(save_path):
         model_files = [f for f in os.listdir(save_path) 
                        if f.startswith('classify_plant_model') and f.lower().endswith(('.h5', '.keras'))]
+
     if request.method == 'POST' and request.FILES.get('new_model'):
         new_model_file = request.FILES['new_model']
+        # ✅ ดึงนามสกุลไฟล์จริงจากไฟล์ที่อัปโหลดมา (.h5 หรือ .keras)
         extension = os.path.splitext(new_model_file.name)[1].lower()
+        
+        # ตรวจสอบว่านามสกุลอยู่ในขอบเขตที่กำหนดหรือไม่
         if extension not in ['.h5', '.keras']:
             return redirect('addmodel')
+
+        # ✅ ลบไฟล์เก่าทั้งหมดที่ชื่อขึ้นต้นด้วย 'classify_plant_model' ออกก่อนบันทึกใหม่
         for old_file in os.listdir(save_path):
             if old_file.startswith('classify_plant_model'):
-                os.remove(os.path.join(save_path, old_file))
+                try:
+                    os.remove(os.path.join(save_path, old_file))
+                except Exception as e:
+                    print(f"Error deleting old file: {e}")
+
+        # ✅ บันทึกไฟล์ใหม่โดยใช้นามสกุลเดิมที่ส่งมา (ตรงตามขอบเขตโครงงาน)
         filename = f'classify_plant_model{extension}'
         fs = FileSystemStorage(location=save_path)
         fs.save(filename, new_model_file)
+        
         return redirect('addmodel')
-    # แก้ไขเป็น /
+
     return render(request, 'dataapp/add_model.html', {
         'model_files': model_files
     })
+
 
 def searchspecies2(request):
     query = request.GET.get("alltext", "")
